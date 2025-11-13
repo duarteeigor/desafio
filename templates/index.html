@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Classificador de E-mails</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+
+<body>
+    <h2>Envie um texto para classificação automática</h2>
+
+    <form id="formEmail">
+        <textarea name="email" placeholder="Digite o email aqui para classificar..."></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <div id="resultado" aria-live="polite">Nenhuma mensagem enviada</div>
+
+    <script>
+        document.getElementById('formEmail').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.textContent = 'Processando...';
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('/analisar', { method: 'POST', body: formData });
+
+                if (!response.ok) {
+                    resultadoDiv.textContent = 'Erro ao processar a requisição.';
+                    return;
+                }
+
+                const data = await response.text();
+                resultadoDiv.textContent = data;
+            } catch (error) {
+                resultadoDiv.textContent = 'Erro de conexão, tente novamente.';
+                console.error(error);
+            }
+        })
+    </script>
+</body>
+
+</html>
