@@ -23,8 +23,8 @@ def analisar():
     print("Texto recebido: ", formated, category)
     return f"Categoria: {category}\nResposta sugerida: {response}"
 
-def handler(request, *args, **kwargs):
-    return app(request.environ, request.start_response)
+def handler(event, context):
+    return app(event, context)
 
 
 
