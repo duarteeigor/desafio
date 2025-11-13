@@ -4,7 +4,7 @@ from api.classifier import classify_email
 from api.generated_response import gerar_resposta_api
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 
 @app.route('/')
 def index():
