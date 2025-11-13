@@ -23,9 +23,6 @@ def analisar():
     print("Texto recebido: ", formated, category)
     return f"Categoria: {category}\nResposta sugerida: {response}"
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 def handler(request, *args, **kwargs):
     return app(request.environ, request.start_response)
 
