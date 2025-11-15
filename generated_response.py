@@ -15,7 +15,7 @@ def gerar_resposta_api(texto):
         "messages": [
             {
                 "role": "user",
-                "content": f"gere uma mensagem curta, seria e profissional respondendo ao texto {texto}" if texto == 'Produtivo' else f'gere uma mensagem curta e gentil respondendo ao {texto}'
+                "content": f"Escreva uma resposta curta, séria e profissional para: {texto}" if texto == 'Produtivo' else f'Escreva uma resposta curta, educada e amigável para: {texto}'
             }
         ],
         "model": "moonshotai/Kimi-K2-Thinking"

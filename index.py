@@ -4,7 +4,7 @@ from classifier import classify_email
 from generated_response import gerar_resposta_api
 
 
-app = Flask(__name__, template_folder="../templates", static_folder="../static")
+app = Flask(__name__)
 
 @app.route('/')
 def index():
@@ -23,8 +23,8 @@ def analisar():
     print("Texto recebido: ", formated, category)
     return f"Categoria: {category}\nResposta sugerida: {response}"
 
-# if __name__ == "__main__":
-#     app.run()
+if __name__ == "__main__":
+    app.run(debug=True)
 
 def handler(event, context):
     return app(event, context)
