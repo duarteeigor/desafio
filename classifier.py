@@ -36,7 +36,20 @@ def classify_email(text):
     else:
         # fallback: modelo huggingface
     
-        classifier = pipeline("zero-shot-classification", model="joeddav/xlm-roberta-large-xnli")
-        result = classifier(text[:512])
-        label = result[0]['label']
-        return "Produtivo" if label == 'POSITIVE' else "Improdutivo"
+        payload = {
+        "inputs": text,
+        "parameters": {
+            "candidate_labels": ["produtivo", "improdutivo"]
+        }
+    }
+
+    response = requests.post(API_URL, headers=headers, json=payload)
+    result = response.json()
+
+    if "labels" not in result:
+            return "Improdutivo"
+
+    label = result["labels"][0]
+
+    return "Produtivo" if label == "produtivo" else "Improdutivo"
+
