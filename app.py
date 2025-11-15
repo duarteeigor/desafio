@@ -18,7 +18,7 @@ def analisar():
     
     formated = processText(email_text)
     category = classify_email(formated)
-    response = gerar_resposta_api(formated)
+    response = gerar_resposta_api(formated, category)
 
     print("Texto recebido: ", formated, category)
     return f"Categoria: {category}\nResposta sugerida: {response}"

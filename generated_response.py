@@ -10,12 +10,12 @@ headers = {
     "Authorization": f"Bearer {API_KEY}",
 }
 
-def gerar_resposta_api(texto):
+def gerar_resposta_api(texto, category):
     payload = {
         "messages": [
             {
                 "role": "user",
-                "content": f"Escreva uma resposta curta, séria e profissional para: {texto}" if texto == 'Produtivo' else f'Escreva uma resposta curta, educada e amigável para: {texto}'
+                "content": f"Escreva uma resposta curta, séria e profissional para: {texto}" if category == 'Produtivo' else f'Escreva uma resposta curta, educada e amigável para: {texto}'
             }
         ],
         "model": "moonshotai/Kimi-K2-Thinking"
