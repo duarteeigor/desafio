@@ -1,142 +1,132 @@
-📧 Email Classifier AI
+# Documentação do Projeto Flask de Classificação de E-mails
 
-Aplicação web que classifica emails automaticamente como Produtivos ou Improdutivos e gera uma resposta automática inteligente utilizando IA.
+## 1. Visão Geral
 
-📌 Visão Geral
+Este projeto consiste em uma aplicação web desenvolvida em **Flask** que recebe um texto de e-mail enviado pelo usuário, processa esse texto, classifica a categoria do e-mail e gera uma resposta automática sugerida com base nessa classificação.
 
-Este projeto foi desenvolvido para automatizar a triagem e resposta de emails dentro de uma grande empresa do setor financeiro, que recebe diariamente um alto volume de mensagens — algumas relevantes e outras completamente improdutivas.
+A aplicação é composta pelos seguintes componentes principais:
 
-A solução permite:
+* **app.py** – arquivo principal contendo rotas Flask e integração entre processamento, classificação e geração de resposta.
+* **text_processing.py** – módulo responsável por pré-processar o texto.
+* **classifier.py** – módulo responsável por classificar o texto em categorias.
+* **generated_response.py** – módulo que gera uma resposta automática baseada no texto e na categoria.
 
-Upload ou inserção direta de texto de emails
+---
 
-Processamento de linguagem natural (NLP)
+## 2. Estrutura do Arquivo `app.py`
 
-Classificação inteligente (Produtivo × Improdutivo)
+### 2.1. Importações
 
-Geração automática de respostas
-
-Interface simples e funcional (Flask + HTML)
-
-🚀 Tecnologias Utilizadas
-Backend
-
-Python 3.x
-
-Flask
-
-Biblioteca de NLP (stopwords, lematização, limpeza de texto)
-
-API de IA para classificação e geração de respostas (ex.: GPT)
-
-Frontend
-
-HTML5
-
-CSS básico
-
-Formulário com textarea para envio do conteúdo do email
-
-📂 Estrutura do Projeto
-/meu-projeto
-│── app.py
-│── classifier.py
-│── generated_response.py
-│── text_processing.py
-│── requirements.txt
-│
-└── /templates
-    └── index.html
-
-🧠 Funcionamento da Solução
-1. Entrada do Usuário
-
-O usuário acessa a página inicial (index.html) e insere o texto do email.
-
-2. Pré-processamento
-
-Arquivo: text_processing.py
-
-Responsável por:
-
-normalização do texto
-
-remoção de stopwords
-
-lematização (se implementado)
-
-limpeza geral
-
-Função principal usada:
-
-formated = processText(email_text)
-
-3. Classificação
-
-Arquivo: classifier.py
-
-Utiliza IA ou regras definidas para determinar a categoria:
-
-Produtivo
-
-Improdutivo
-
-Função chamada:
-
-category = classify_email(formated)
-
-4. Geração da resposta
-
-Arquivo: generated_response.py
-
-Chama uma API de IA para gerar um texto coerente e adequado à categoria:
-
-response = gerar_resposta_api(formated, category)
-
-5. Retorno ao usuário
-
-A aplicação retorna:
-
-Categoria: Produtivo ou Improdutivo
-Resposta sugerida: <texto gerado pela IA>
-
-🖥️ Código Principal — app.py
+```python
 from flask import Flask, render_template, request
 from text_processing import processText
 from classifier import classify_email
 from generated_response import gerar_resposta_api
+```
 
+Essas importações permitem:
+
+* Criar rotas e renderizar páginas HTML (Flask).
+* Processar texto recebido.
+* Classificar a categoria do e-mail.
+* Gerar uma resposta automática.
+
+---
+
+## 3. Inicialização da Aplicação Flask
+
+```python
 app = Flask(__name__)
+```
 
+Cria a instância principal da aplicação.
+
+---
+
+## 4. Rotas
+
+### 4.1. Rota Principal (`/`)
+
+```python
 @app.route('/')
 def index():
     return render_template('index.html')
+```
 
+* Retorna a página inicial da aplicação.
+* Renderiza o arquivo `index.html` que contém o formulário para envio do texto.
+
+---
+
+### 4.2. Rota de Análise (`/analisar`)
+
+```python
 @app.route('/analisar', methods=['POST'])
 def analisar():
     email_text = request.form['email']
     if not email_text.strip():
         return "Nenhuma mensagem enviada"
-    
+
     formated = processText(email_text)
     category = classify_email(formated)
     response = gerar_resposta_api(formated, category)
 
     print("Texto recebido: ", formated, category)
     return f"Categoria: {category}\nResposta sugerida: {response}"
+```
 
+#### Etapas executadas:
+
+1. **Recebe o texto do formulário HTML**.
+2. **Valida** se o texto não está vazio.
+3. **Processa o texto** usando `processText()`.
+4. **Classifica o e-mail** usando `classify_email()`.
+5. **Gera uma resposta automática** com `gerar_resposta_api()`.
+6. **Retorna para o usuário** a categoria identificada e a resposta sugerida.
+
+---
+
+## 5. Execução Local
+
+```python
 if __name__ == "__main__":
     app.run(debug=True)
+```
 
+Permite rodar a aplicação localmente com debug habilitado.
+
+---
+
+## 6. Integração com AWS Lambda
+
+```python
 def handler(event, context):
     return app(event, context)
+```
 
-🌐 Execução Local
-1. Instalar dependências
-pip install -r requirements.txt
+* Função handler que adapta a aplicação para ambientes serverless.
+* Permite integração com **AWS API Gateway + Lambda**.
 
-2. Rodar a aplicação
-python app.py
+---
 
-3. Acessar o navegador
-http://127.0.0.1:5000
+## 7. Fluxo Completo da Aplicação
+
+1. Usuário acessa a página inicial.
+2. Envia um texto para análise.
+3. O texto é pré-processado.
+4. O texto processado é classificado.
+5. A API interna gera uma resposta automática.
+6. Usuário recebe a categoria e a resposta sugerida.
+
+---
+
+## 8. Arquitetura Lógica
+
+```
+[Usuário] → [Formulário HTML] → [Flask /analisar] →
+→ processText → classify_email → gerar_resposta_api →
+→ [Resposta ao usuário]
+```
+
+---
+
